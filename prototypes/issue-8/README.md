@@ -30,6 +30,8 @@ Advance-time buttons and the example-date control are disclosed shortcuts. Norma
 
 The four CAGED string sets and subsequent I–IV–V, vi/ii and improvisation exercises reflect the resolved progression. All exercise directions, criteria, song titles, song text and seeded history are **invented illustrative material**, not player-approved curriculum. No copyrighted song material is supplied. The player can edit Instructions, Explanation, Hints, criteria and Next Time Notes.
 
+Duration changes apply to the active session and retain its elapsed time. **Save as defaults** also applies the chosen durations to future sessions. An explicit section-only review choice stays selected when that session starts. Results are ordered by performance date, then by assessment entry order for the same date; corrections keep the existing record in that order.
+
 This is one local, self-contained HTML file. No production application changes, dependencies, accounts, playback, tab component, imports, deployment or migration are included. Only Cedar Path has an editable section learning view; other invented songs demonstrate review selection and priority. The first two exercises and one earlier confirmation day for the third are seeded to make mastery and guidance visible immediately.
 
 ## Remaining decisions and limits

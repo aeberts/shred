@@ -21,6 +21,7 @@ const Practice = (() => {
   return {version:1,today,demoDate:false,defaults:[15,20,15],plan:[15,20,15],goal:{title:'Use triads freely in my playing',criterion:'Connect triad shapes in several keys with reliable voice leading.',integrated:false},exercises,learning:'e2',mastery:['e0','e1'],selectedExercise:'e2',reveal:false,songs:[{id:'s0',title:'Cedar Path · invented',learned:false,rating:null,due:null,step:0},{id:'s1',title:'Evening Loop · invented',learned:true,rating:'Playable',due:addDays(today,-2),step:1},{id:'s2',title:'Quiet Steps · invented',learned:true,rating:'Performance-ready',due:addDays(today,-5),step:2},{id:'s3',title:'Open Window · invented',learned:true,rating:'Needs work',due:addDays(today,-7),step:0}],sections,order:['intro','verse','chorus','verse','chorus'],range:[0,1],memory:false,section:'verse',reviewSong:'s1',reviewFirst:true,attempts:[],activeAttempt:null,results:[],decisions:[],confirmations:[],sessions:[],session:null,nextId:1,scenario:null,scenarioStep:0};
  }
  const selected = s=>s.exercises.find(e=>e.id===s.selectedExercise);
+ const newestResults = rs=>rs.map((result,index)=>({result,index})).sort((a,b)=>b.result.performance.localeCompare(a.result.performance)||b.index-a.index).map(x=>x.result);
  const session = s=>s.sessions.find(x=>x.id===s.session);
  function suggest(s){const p={'Playable':0,'Performance-ready':1,'Needs work':2};return s.songs.filter(x=>x.learned&&x.due&&x.due<=s.today).sort((a,b)=>(p[a.rating]??3)-(p[b.rating]??3)||a.due.localeCompare(b.due))[0]?.id||s.songs.find(x=>x.learned&&!x.rating)?.id||'';}
  function guidance(e,today){const days=e.days.filter(d=>!e.restartDay||d>=e.restartDay);return Math.max(1,days.length);}
@@ -29,7 +30,7 @@ const Practice = (() => {
  switch(a.type){
  case 'RESET':return {state:seed(a.today||s.today),message:'Illustrative data reset. This is a demo setup shortcut.'};
  case 'DAY':if(!/^\d{4}-\d{2}-\d{2}$/.test(a.value))return problem('Choose a valid local practice date.');s.today=a.value;s.demoDate=true;message='Example local practice day changed. This demo shortcut does not record practice.';break;
- case 'PLAN':{const v=a.values.map(Number);if(a.values.some(x=>String(x).trim()==='')||v.some(n=>!Number.isFinite(n)||n<0||n>180))return problem('Enter 0 to 180 minutes for each block. Zero skips a block.');s.plan=v;if(a.defaults){s.defaults=[...v];message='Chosen durations saved as future defaults.';}else message='Durations changed for the next session only.';break;}
+ case 'PLAN':{const v=a.values.map(Number);if(a.values.some(x=>String(x).trim()==='')||v.some(n=>!Number.isFinite(n)||n<0||n>180))return problem('Enter 0 to 180 minutes for each block. Zero skips a block.');s.plan=v;if(q&&!q.ended)q.planned=[...v];if(a.defaults){s.defaults=[...v];message='Chosen durations saved as future defaults.';}else message=q&&!q.ended?'Durations changed for the current session. Elapsed time is retained.':'Durations changed for the next session.';break;}
  case 'SELECT_LEARNING':if(a.id&&!s.exercises.some(x=>x.id===a.id&&!x.learned)&&!a.keep)return problem('Choose an exercise still in learning.');s.learning=a.id;if(a.id)s.selectedExercise=a.id;break;
  case 'MASTERY':if(a.ids.some(id=>!s.exercises.some(x=>x.id===id&&x.learned)))return problem('Mastery uses learned exercises.');s.mastery=a.ids;break;
  case 'VIEW':if(!s.exercises.some(x=>x.id===a.id))return problem('Choose an exercise.');s.selectedExercise=a.id;s.reveal=false;break;
@@ -41,7 +42,7 @@ const Practice = (() => {
  case 'RESTART':e.learned=false;e.restartDay=s.today;stamp(s,'Exercise learning restarted',e.title);message='Guidance restarted explicitly. Earlier evidence is retained.';break;
  case 'GOAL':s.goal.integrated=!s.goal.integrated;stamp(s,s.goal.integrated?'Goal Integrated':'Goal reactivated',s.goal.title);break;
  case 'CRITERION':if(!a.text.trim())return problem('Enter a criterion.');s.goal.criterion=a.text;message='Current goal criterion revised. Past Results retain the earlier criterion.';break;
- case 'START':if(q&&!q.ended)return problem('Resume or end the current session first.');s.mastery=s.mastery.filter(id=>s.exercises.some(x=>x.id===id&&x.learned));if(s.goal.integrated){s.learning='';s.mastery=[];}s.reviewSong=s.reviewSong&&s.songs.find(x=>x.id===s.reviewSong)?.learned?s.reviewSong:suggest(s);s.session='p'+s.nextId++;s.sessions.push({id:s.session,date:s.today,planned:[...s.plan],actual:[0,0,0],extra:[0,0,0],block:0,running:false,ended:false,confirmed:[],range:[...s.range],order:[...s.order],results:[],reviews:[]});message='Session prepared. Start the first timer when ready.';break;
+ case 'START':if(q&&!q.ended)return problem('Resume or end the current session first.');s.mastery=s.mastery.filter(id=>s.exercises.some(x=>x.id===id&&x.learned));if(s.goal.integrated){s.learning='';s.mastery=[];}if(s.reviewSong&&!s.songs.find(x=>x.id===s.reviewSong)?.learned)s.reviewSong=suggest(s);s.session='p'+s.nextId++;s.sessions.push({id:s.session,date:s.today,planned:[...s.plan],actual:[0,0,0],extra:[0,0,0],block:0,running:false,ended:false,confirmed:[],range:[...s.range],order:[...s.order],results:[],reviews:[]});message='Session prepared. Start the first timer when ready.';break;
  case 'FRESH':if(q){q.ended=true;q.running=false;}s.plan=[...s.defaults];s.session=null;s.reviewSong=suggest(s);message='Previous session ended. Fresh timers use saved defaults; notes and unfinished reviews remain.';break;
  case 'END':if(!q)return problem('There is no session to end.');q.ended=true;q.running=false;s.activeAttempt=null;message='Session ended. Confirmed work and unfinished attempts are preserved.';break;
  case 'TIMER':if(!q||q.ended)return problem('Prepare a session first.');q.running=!q.running;message=q.running?'Timer running. This records time only.':'Timer paused.';break;
@@ -67,7 +68,7 @@ const Practice = (() => {
  return {state:s,message};
  }
  function restore(s){if(!s||s.version!==1||!Array.isArray(s.sessions)||!Array.isArray(s.exercises))throw Error('Stored demo data is not recognised.');const r=copy(s);r.sessions.forEach(x=>x.running=false);r.activeAttempt=null;return r;}
- return {seed,reduce,restore,selected,session,suggest,guidance,addDays};
+ return {seed,reduce,restore,selected,session,suggest,guidance,addDays,newestResults};
 })();
 </script>
 <script>
@@ -86,7 +87,7 @@ function editSection(){act({type:'SECTION_EDIT',fields:{instructions:$('sectionI
 function submitResult(){act({type:'RESULT',id:editingResult,direct:$('resultTarget').value==='goal',assessment:$('assessment').value,measurement:$('measurement').value,unit:$('unit').value,context:$('context').value,note:$('resultNote').value,date:$('performanceDate').value});editingResult=null;render();}
 function correctResult(id){editingResult=id;render();$('resultForm').scrollIntoView({behavior:'instant',block:'center'});}
 function render(){
- const s=state,e=Practice.selected(s),q=Practice.session(s),active=q&&!q.ended,g=Practice.guidance(e,s.today),latest=[...s.results].filter(x=>x.exercise===e.id).sort((a,b)=>b.performance.localeCompare(a.performance)).at(0),sec=s.sections[s.section],suggestion=Practice.suggest(s),at=s.attempts.find(x=>x.id===s.activeAttempt),old=s.results.find(x=>x.id===editingResult),eligible=s.exercises.filter(x=>x.learned&&!s.goal.integrated);
+ const s=state,e=Practice.selected(s),q=Practice.session(s),active=q&&!q.ended,g=Practice.guidance(e,s.today),latest=Practice.newestResults(s.results.filter(x=>x.exercise===e.id)).at(0),sec=s.sections[s.section],suggestion=Practice.suggest(s),at=s.attempts.find(x=>x.id===s.activeAttempt),old=s.results.find(x=>x.id===editingResult),eligible=s.exercises.filter(x=>x.learned&&!s.goal.integrated);
  $('message').textContent=notice;
  $('app').innerHTML=`
  <div class="grid"><section class="card"><h2>1 · Prepare a session</h2><p class="muted">Suggested learning: ${esc(s.exercises.find(x=>x.id===s.learning)?.title||'No learning exercise selected')}. Learned material stays available for mastery.</p>
@@ -105,7 +106,7 @@ function render(){
 }
 function timerText(q){const n=q.planned[q.block]*60+q.extra[q.block]-q.actual[q.block];return `${n<0?'+':''}${fmt(n>0?Math.ceil(n):n)}`;}
 function timerCaption(q){const n=q.planned[q.block]*60+q.extra[q.block]-q.actual[q.block];return `${q.running?'Running':'Paused'} · ${n<=0?'Planned time reached. Gentle overtime; finish when ready.':'remaining'} · actual ${fmt(q.actual[q.block])}`;}
-function renderResults(rs){return rs.length?rs.slice().sort((a,b)=>b.performance.localeCompare(a.performance)).map(x=>`<details><summary>${x.id} · ${esc(x.assessment)} · ${x.performance}${x.corrected?' · corrected':''}</summary><p>Criterion then: ${esc(x.criterion)}</p><pre style="white-space:pre-wrap">Material then: ${esc(x.material)}</pre><p>Measurement: ${esc(x.measurement)} ${esc(x.unit)} · Context: ${esc(x.context)}</p><p>Entry: ${x.entry} · ${esc(x.note)}</p><div class="row"><button onclick="correctResult('${x.id}')">Correct ${x.id}</button><button onclick="act({type:'RESULT_DELETE',id:'${x.id}'})">Delete mistaken Result</button></div></details>`).join(''):'<p class="muted">No Results yet.</p>';}
+function renderResults(rs){return rs.length?Practice.newestResults(rs).map(x=>`<details><summary>${x.id} · ${esc(x.assessment)} · ${x.performance}${x.corrected?' · corrected':''}</summary><p>Criterion then: ${esc(x.criterion)}</p><pre style="white-space:pre-wrap">Material then: ${esc(x.material)}</pre><p>Measurement: ${esc(x.measurement)} ${esc(x.unit)} · Context: ${esc(x.context)}</p><p>Entry: ${x.entry} · ${esc(x.note)}</p><div class="row"><button onclick="correctResult('${x.id}')">Correct ${x.id}</button><button onclick="act({type:'RESULT_DELETE',id:'${x.id}'})">Delete mistaken Result</button></div></details>`).join(''):'<p class="muted">No Results yet.</p>';}
 let last=performance.now();setInterval(()=>{const now=performance.now(),seconds=(now-last)/1000;last=now;const q=Practice.session(state);if(q?.running&&!q.ended){state=Practice.reduce(state,{type:'ELAPSE',seconds}).state;save();if($('clock')){$('clock').textContent=timerText(Practice.session(state));$('timerCaption').textContent=timerCaption(Practice.session(state));}}},1000);
 window.addEventListener('pagehide',()=>{const q=Practice.session(state);if(q)q.running=false;save();});
 </script>
