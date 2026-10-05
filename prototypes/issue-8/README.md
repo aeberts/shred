@@ -16,7 +16,7 @@ For an evaluation, open the **Evaluation area** below the workspace. It contains
 
 ## Input, evidence and saving
 
-Drafts stay with their original Exercise, shared Song Section, new assessment target or corrected Result during in-page navigation. Guidance toggles, material/block changes and history browsing retain them. A Result rejected for a missing assessment keeps measurement, unit, context, note and date; the local error focuses the assessment field. Correction retains the record ID, original criterion/material and entry position. Test Context remains editable.
+Drafts stay with their original Exercise, shared Song Section, new assessment target or corrected Result during in-page navigation. Guidance toggles, material/block changes and history browsing retain them. A Result rejected for a missing assessment keeps measurement, unit, context, note and date; the local error focuses the assessment field. Submission brings the feedback and relevant field or save action into view below the sticky timer. Correction retains the record ID, original criterion/material and entry position. Test Context remains editable.
 
 Practice Confirmation, Result assessment, Learned and Integrated are separate decisions. A Learned decision offers the next Exercise but keeps current material until the player switches. A range has no learned state. Repeated sections share their material, state and notes. Song memory mode hides all Instructions, Explanation and Hints, including editors. Review completion needs an explicit rating; timer completion supplies none.
 
