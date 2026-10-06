@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shred · reference UI prototype</title>
+<link rel="stylesheet" href="practice.css">
+<link rel="stylesheet" href="library.css">
+<link rel="stylesheet" href="explore.css?v=7">
+</head>
+<body class="direction-b">
+<div class="comparison"><span class="comparison-label">Shred reference UI · Inline reference</span><span class="comparison-label">Approved October 6, 2026 · prototype</span></div>
+<aside class="rail"><div class="brand"><span class="brand-icon">♩</span>shred<span style="color:#a5dfc7;margin-left:-9px">.</span></div><p class="rail-label">YOUR PRACTICE SPACE</p><div class="nav-current"><span>♫</span> Daily practice</div><div class="rail-rule"></div><p class="rail-label" style="margin-top:27px">THE DAILY ROUTINE</p><div class="rail-total">50<span>min</span></div><p class="rail-copy">A little discovery.<br>A little repetition.<br>More music.</p><div class="rail-bars"><i></i><i></i><i></i></div><div class="rail-bottom">Zand's practice space<small>One session at a time</small></div></aside>
+<main class="main"><header class="page-head"><div><p class="eyebrow">Pick up where you left off</p><h1>Daily practice</h1></div><p class="date"><span>▦</span> Monday, October 5, 2026</p></header><div class="workspace"><section class="panel today-panel"><div class="panel-head"><div><h2>Today's session</h2><p class="sub" id="session-status">Suggested routine · ready when you are</p></div><button class="text-button" id="adjust">Adjust routine</button></div><div class="timer"><div><p class="timer-label" id="timer-label">Learning</p><div class="timer-number" id="timer-number">15:00</div><p class="timer-state" id="timer-state">remaining · ready to start</p></div><button class="primary" id="timer-action">▷ &nbsp; Start block</button></div><div class="routine" id="routine"></div><div class="reflection" id="reflection-area"><div class="reflection-head"><label for="reflection">Session reflection</label><span class="sub" style="font-size:10px">Just for this session</span></div><textarea id="reflection" placeholder="What clicked? What would you like to remember?"></textarea><div class="session-foot"><button class="text-button" id="end-session">End session</button><span class="sub" style="font-size:10px" id="reflection-status">Optional · no assessment recorded</span></div></div></section><div class="side"><section class="panel calendar-panel" id="calendar"></section><section class="panel stand-panel" id="stand"></section></div></div><p class="footer">Small steps. Better playing.</p></main>
+<div class="modal-backdrop" id="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title"></h2><button aria-label="Close dialog" id="close-modal">✕</button></div><div id="modal-content"></div></section></div><div class="toast" id="toast" role="status"></div>
+<script src="vendor/alphatab/alphaTab.min.js"></script>
+<script src="practice.js?v=7"></script>
+<script src="library.js?v=5"></script>
+<script src="guitar-pro.js?v=6"></script>
+<script src="explore.js?v=7"></script>
+</body>
+</html>

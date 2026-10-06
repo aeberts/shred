@@ -10,13 +10,18 @@ The earlier Reagent prototype remains in Git history at `9d4cd39`.
 
 ## Reference UI prototype
 
-The selected UI starting point is **Variant B, Round 8**, with Daily practice and
-the Exercise library. Open its [guide](prototypes/daily-practice/ui-explore/README.md)
-for the local preview, decisions and known limits. It is a disposable prototype;
-the production starter does not yet implement these workflows.
+The approved UI reference is **Inline reference (A), alphaTab round 6**, accepted
+on October 6, 2026. It includes Daily practice, goal authoring and collapsible
+goal groups in the Exercise library, one Instructions field per Exercise, and
+Guitar Pro upload, track preview and replacement through alphaTab. Open its
+[guide](prototypes/daily-practice/alphatab-explore/README.md) for the local preview,
+accepted behavior and known limits. Future prototype work should extend this
+reference. The production starter does not yet implement these workflows.
 
-The full UI exploration is preserved in commit `32ca256`. The reference branch
-`codex/ui-reference-b-round-8` contains only the selected composition.
+The new reference is committed on `codex/ui-explore-alphatab`, based on
+`d8e38c7`. Its guide links the archived A/B/C comparison and feedback rounds.
+The previous Variant B round 8 reference remains at `d8e38c7`; the earlier full
+UI exploration remains at `32ca256`.
 
 ## Run locally
 

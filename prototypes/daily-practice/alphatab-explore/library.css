@@ -1,0 +1,65 @@
+/* Round 8: the Exercise library shares the accepted B shell. */
+.main[hidden]{display:none}
+.space-nav{display:flex;flex-direction:column;gap:5px}
+.space-nav button{display:flex;align-items:center;gap:10px;text-align:left;width:100%;border:0;background:transparent;color:#a9c4c0;padding:12px 10px;font-size:12px;font-weight:500}
+.space-nav button:hover{background:#234247;color:#dceee8}
+.space-nav button[aria-current="page"]{background:#2a484d;color:#d4eee4}
+.space-nav span{font-size:16px;width:17px;text-align:center}
+.library-intro{margin-top:7px;font-size:13px;color:var(--muted)}
+.library-session{display:flex;align-items:center;gap:18px;padding:11px 16px;margin-bottom:20px;background:#eaf2ef;border:1px solid #d5e4dc;border-radius:9px;position:sticky;top:8px;z-index:3}
+.library-session .small-label{font-size:9px}
+.library-session-title{font-size:12px;font-weight:600;margin-top:2px}
+.library-session-clock{font-size:23px;font-variant-numeric:tabular-nums;letter-spacing:-.6px;margin-left:auto}
+.library-session-state{font-size:11px;color:#698279;min-width:82px}
+.library-session button{font-size:11px;padding:6px 12px}
+.library-session .text-button{margin-left:5px}
+.library-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) 230px 165px;gap:12px;margin-bottom:22px}
+.library-toolbar label{font-size:10px;font-weight:600;color:#718782;display:block;margin-bottom:5px}
+.library-toolbar input,.library-toolbar select{width:100%;min-height:39px;border:1px solid #d6e2dd;border-radius:7px;padding:8px 11px;color:#3e5e55;background:white;font-size:12px}
+.library-workspace{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;align-items:start}
+.library-list-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:12px;color:#728880}
+.library-list-head strong{font-size:13px;color:#3e5d52}
+.library-group{margin-bottom:16px}
+.library-group h2{font-size:12px;font-weight:600;letter-spacing:0;line-height:1.5;margin-bottom:4px;color:#587569}
+.library-group-sub{font-size:10px;color:#8a9d96;margin-bottom:10px}
+.library-item{display:flex;gap:11px;width:100%;padding:10px 12px;text-align:left;background:white;border:1px solid var(--border);border-radius:8px;margin-top:7px;font-weight:400;min-height:64px}
+.library-item[aria-pressed="true"]{border-color:#68a98c;background:#f4faf6;box-shadow:0 0 0 1px #68a98c22}
+.library-item-index{display:grid;place-items:center;flex:none;width:27px;height:28px;background:#eff4f1;border-radius:6px;color:#779183;font-size:11px}
+.library-item[aria-pressed="true"] .library-item-index{background:#d9ece0;color:#386c50}
+.library-item-body{min-width:0;flex:1}
+.library-item-title{display:block;font-weight:650;font-size:12px;color:#2e4e43;line-height:1.5}
+.library-item-meta{display:flex;gap:8px;font-size:10px;color:#82988c;margin-top:5px}
+.library-item-meta .current-marker{color:#397959;font-weight:600}
+.library-detail{padding:25px}
+.library-detail-top{display:flex;align-items:start;justify-content:space-between;gap:16px;margin-bottom:20px}
+.library-detail .stand-title{font-size:24px}
+.library-detail .stand-kicker{font-size:10px;letter-spacing:.8px;margin-bottom:7px}
+.library-detail .badge{display:inline-block;margin-top:9px;background:#eaf4ee;color:#4d7962}
+.library-detail .text-button{white-space:nowrap}
+.library-goal{border-left:3px solid #9cc9ae;padding:0 0 0 12px;margin-bottom:22px}
+.library-goal strong{display:block;font-size:13px;font-weight:600;margin-top:4px}
+.library-goal p{font-size:11px;color:#7e9288;margin-top:4px;line-height:1.6}
+.library-detail .material{min-height:0;font-size:13px;line-height:1.8;margin-top:9px;padding:18px}
+.library-sequence{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:#f2f7f4;border-radius:7px;margin-top:17px;font-size:11px;color:#607f6e}
+.library-sequence strong{font-weight:600;color:#3c6851}
+.library-guidance{margin-top:19px;border-top:1px solid #e5ece7;padding-top:14px}
+.library-guidance details{margin-top:9px}
+.library-guidance summary{font-size:12px;cursor:pointer;color:#4a705c;font-weight:600;padding:5px 0}
+.library-guidance pre{font-size:12px;min-height:0;margin-top:7px}
+.library-detail-note{margin-top:20px;border-top:1px solid #e5ece7;padding-top:16px}
+.library-detail-note p{font-size:12px;line-height:1.7;color:#63816d;margin-top:7px}
+.library-empty{padding:35px 20px;text-align:center;border:1px dashed #cadbd0;border-radius:9px;color:#6e8a79;font-size:12px}
+.library-empty button{display:block;margin:12px auto 0}
+.library-form label{display:block;font-size:12px;font-weight:600;color:#4f705d;margin:14px 0 6px}
+.library-form input,.library-form select,.library-form textarea{width:100%;border:1px solid #ccdcd2;border-radius:7px;background:#fcfefc;color:#345541;padding:10px 12px;font-size:13px}
+.library-form textarea{min-height:150px;resize:vertical;font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace}
+.library-form input[aria-invalid="true"],.library-form textarea[aria-invalid="true"]{border-color:#aa604e}
+.library-form details{border-top:1px solid #e3ece5;margin-top:18px;padding-top:14px}
+.library-form summary{font-size:12px;font-weight:600;color:#52765e;cursor:pointer}
+.library-form details textarea{min-height:90px}
+.library-form-footer{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.library-feedback{font-size:12px;color:#537b60;margin-top:12px;line-height:1.6}
+.library-feedback:empty{display:none}
+.library-feedback.error{color:#985a45}
+@media(max-width:1100px){.library-workspace{grid-template-columns:280px minmax(0,1fr)}.library-toolbar{grid-template-columns:minmax(160px,1fr) 190px 150px}.library-detail{padding:20px}.library-session{gap:12px}}
+@media(max-width:760px){.direction-b .rail{display:block;position:static;width:100%;padding:10px 18px}.direction-b .rail>:not(.space-nav){display:none}.space-nav{flex-direction:row}.space-nav button{width:auto;padding:8px 12px}.library-toolbar{grid-template-columns:1fr 1fr}.library-toolbar>div:first-child{grid-column:1/-1}.library-workspace{grid-template-columns:minmax(0,1fr)}.library-session{flex-wrap:wrap;gap:8px}.library-session .text-button{margin-left:auto}.library-session-state{min-width:0}.library-session-clock{font-size:21px}.library-detail .stand-title{font-size:21px}.library-sequence{align-items:start;flex-direction:column;gap:4px}}

@@ -1,6 +1,8 @@
 # Shred reference UI — Variant B, Round 8
 
-This is the player's chosen starting point for Shred's UI. It contains one reference composition: Daily practice and the Exercise library. Future prototype work should extend this reference. It is a disposable prototype, not the production application.
+This previous reference was superseded on October 6, 2026 by the approved [Inline reference with alphaTab](../alphatab-explore/README.md). Future prototype work should extend that new reference. This directory preserves the earlier Daily practice and Exercise library composition; its original acceptance notes follow below.
+
+This was the player's chosen starting point for Shred's UI. It contains one reference composition: Daily practice and the Exercise library. It is a disposable prototype, not the production application.
 
 ## Open the prototype
 
