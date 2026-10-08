@@ -1,0 +1,10 @@
+{
+  "id": "bounded_outcome",
+  "version": 1,
+  "type": "choice",
+  "instructions": "Is the requested outcome bounded by the selected issue and cited source decisions? Decide independently from the supplied evidence.",
+  "criteria": {
+    "yes": "The outcome and scope have a clear boundary.",
+    "no": "The outcome or scope is open-ended."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "testable_criteria",
+  "version": 1,
+  "type": "choice",
+  "instructions": "Can the acceptance criteria distinguish a real fix from a happy-path demonstration? Decide independently from the supplied evidence.",
+  "criteria": {
+    "yes": "The criteria have observable behavior and a meaningful failure case.",
+    "no": "The criteria cannot distinguish a real fix from a happy-path demonstration."
+  }
+}

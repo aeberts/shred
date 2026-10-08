@@ -1,0 +1,10 @@
+{
+  "id": "unresolved_product_decision",
+  "version": 1,
+  "type": "choice",
+  "instructions": "Does a material product decision remain unresolved before implementation? Decide independently from the supplied evidence.",
+  "criteria": {
+    "yes": "A material product decision remains unresolved.",
+    "no": "No material product decision is unresolved in the cited evidence."
+  }
+}

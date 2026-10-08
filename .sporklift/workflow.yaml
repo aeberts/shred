@@ -1,0 +1,245 @@
+schema_version: 3
+max_seconds: 360
+max_worker_turns: 16
+repository:
+  identity: aeberts/shred
+  workspace:
+    mode: single_checkout
+    binding: primary
+    on_dirty: stop
+  issue_branch:
+    mode: one_per_issue
+    name: codex/issue-{issue_number}
+  integration:
+    branch: master
+    method: merge_no_ff
+    respect_branch_protection: true
+roles:
+  coordinator: roles/coordinator.md
+  implementer: roles/implementer.md
+  qa: roles/qa.md
+  planner: roles/planner.md
+delivery:
+  version: 1
+  model_profiles:
+    worker:
+      model: openai-codex/gpt-6-sol
+      reasoning: high
+      credential_ref: env:OPENAI_API_KEY
+    jev:
+      model: typesafe/jev-1.13.0
+      reasoning: low
+      credential_ref: env:JEV_API_KEY
+  roles:
+    coordinator:
+      model_profile: worker
+      session: coordinator
+    planner:
+      model_profile: worker
+      session: planner
+    implementer:
+      model_profile: worker
+      session: implementer
+    qa:
+      model_profile: worker
+      session: qa
+  readiness:
+    model_profile: jev
+    comparator_profile: worker
+    questions:
+      bounded_outcome: questions/bounded_outcome.yaml
+      testable_criteria: questions/testable_criteria.yaml
+      unresolved_product_decision: questions/unresolved_product_decision.yaml
+    rubric: rubrics/readiness.md
+    timeout_seconds: 30
+    max_pairs: 3
+    comparator_session: readiness_comparator
+  actions:
+    scripted_planner:
+      role: planner
+      gate: Set Up Run
+    define_issue:
+      role: planner
+      gate: Set Up Run
+    implement:
+      role: implementer
+      gate: Ready for Dispatch
+    review_candidate:
+      role: qa
+      gate: Record Candidate
+    correct_candidate:
+      role: implementer
+      gate: Record Candidate
+    integrate:
+      role: coordinator
+      gate: Accept Candidate
+    verify_delivery:
+      role: coordinator
+      gate: Integrate Change
+  gates:
+    Set Up Run:
+      criteria:
+        - run_identity
+        - provisional_authority
+        - frozen_configuration
+        - durable_recording
+        - ownership_control
+        - stop_path
+        - observation_path
+      requires: []
+    Define Issue:
+      criteria:
+        - issue_bound_to_authority
+        - ready_contract
+        - product_choices_sourced
+      requires:
+        - Set Up Run
+    Prepare Workspace:
+      criteria:
+        - repository_identity
+        - target_identity
+        - workspace_identity
+        - required_tools
+        - qa_route
+        - agent_configuration
+      requires:
+        - Set Up Run
+    Ready for Dispatch:
+      criteria:
+        - set_up_run
+        - define_issue
+        - prepare_workspace
+        - blockers_clear
+        - current_authority
+        - limits_available
+        - observation_healthy
+        - sole_writer
+      requires:
+        - Set Up Run
+        - Define Issue
+        - Prepare Workspace
+    Record Candidate:
+      criteria:
+        - exact_candidate
+        - exact_contract
+        - implementation_evidence
+        - writer_stopped
+      requires:
+        - Ready for Dispatch
+    Accept Candidate:
+      criteria:
+        - required_checks
+        - independent_qa
+        - findings_resolved
+        - evidence_fresh
+        - check:typecheck
+        - check:lint
+        - check:build
+      requires:
+        - Record Candidate
+    Integrate Change:
+      criteria:
+        - accepted_candidate
+        - refreshed_target
+        - verified_integration_result
+        - integration_checks
+        - fresh_qa_if_target_moved
+        - current_push_authority
+      requires:
+        - Accept Candidate
+    Verify Delivery:
+      criteria:
+        - remote_result_verified
+        - delivery_evidence_recorded
+        - closure_rule
+      requires:
+        - Integrate Change
+  checks:
+    typecheck:
+      command:
+        - npm
+        - run
+        - typecheck
+      owner: implementer
+      timeout_seconds: 90
+    lint:
+      command:
+        - npm
+        - run
+        - lint
+      owner: implementer
+      timeout_seconds: 90
+    build:
+      command:
+        - npm
+        - run
+        - build
+      owner: implementer
+      timeout_seconds: 180
+  qa_profiles:
+    technical:
+      - automated
+      - failure_paths
+    bounded_interface:
+      - automated
+      - failure_paths
+      - interactive
+    consequential_interface:
+      - automated
+      - failure_paths
+      - interactive
+      - product_decision
+  correction:
+    max_cycles: 2
+    reserve_cycles: 1
+    on_exhaustion: human_decision
+  deadlines:
+    worker_seconds: 360
+    model_seconds: 30
+    on_expiry: stop
+  stop:
+    crash_limit: 3
+    capture_loss: stop
+    authority_loss: stop
+    no_progress: human_decision
+  transitions:
+    initialized:
+      from: initializing
+      to: pre_dispatch
+      gate: Set Up Run
+      action: define_issue
+    ready:
+      from: pre_dispatch
+      to: implementing
+      gate: Ready for Dispatch
+      action: implement
+    candidate:
+      from: implementing
+      to: verifying
+      gate: Record Candidate
+      action: review_candidate
+    qa_failed:
+      from: verifying
+      to: remediating
+      gate: Record Candidate
+      action: correct_candidate
+    corrected:
+      from: remediating
+      to: verifying
+      gate: Record Candidate
+      action: review_candidate
+    qa_passed:
+      from: verifying
+      to: integrating
+      gate: Accept Candidate
+      action: integrate
+    integrated:
+      from: integrating
+      to: publishing
+      gate: Integrate Change
+      action: verify_delivery
+    verified:
+      from: publishing
+      to: delivered
+      gate: Verify Delivery
+      action: null
